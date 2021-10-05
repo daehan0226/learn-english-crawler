@@ -32,6 +32,8 @@ class Crawler_freedictionary(Crawler):
                 )
                 examples.extend(self.get_text_contents_from_elemets(example_elements))
 
+            self.log_parsing_result(len(definitions), len(examples))
+
         except Exception as e:
             _, _, tb = sys.exc_info()
             self.logging.error(f"parse except,  {tb.tb_lineno},  {e.__str__()}")

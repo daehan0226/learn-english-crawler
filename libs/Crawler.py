@@ -117,3 +117,17 @@ class Crawler:
                 f"parse text contents except {str(tb.tb_lineno)}, {e.__str__()}"
             )
         return result
+
+    def log_parsing_result(self, definition_count, example_count):
+        self.logging.info(
+            f"parsed definition {str(definition_count)}, example {str(example_count)}"
+        )
+
+    def trim_spaces(self, sentences):
+        result = []
+        for sentence in sentences:
+            if sentence.startswith(": "):
+                sentence = sentence[2:]
+            sentence = sentence.strip()
+            result.append(sentence)
+        return result
