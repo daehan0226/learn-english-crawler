@@ -125,16 +125,15 @@ class Crawler:
         )
 
     def upload_parsed_data(self, site, keyword, definitions, examples):
-        URL = config["api_address"]
         verb, particle = keyword.split(" ", 1)
+        URL = f'{config["api_address"]}/{verb}'
         data = {
             "src": site,
-            "verb": verb,
             "particle": particle,
             "definitions": definitions,
             "examples": examples,
         }
-        res = requests.post(URL, data=data)
+        res = requests.put(URL, data=data)
 
     def trim_spaces(self, sentences):
         result = []
