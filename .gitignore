@@ -1,0 +1,24 @@
+
+# env
+venv
+
+# driver
+driver
+chromedriver.exe
+
+# logs
+logs
+debug.log
+logs/*
+
+#
+.idea
+
+#
+_pycahe_
+*.pyc
+
+
+
+#config
+config/
