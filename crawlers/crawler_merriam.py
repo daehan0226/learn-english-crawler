@@ -10,8 +10,11 @@ class Crawler_merriam(Crawler):
         self.definition_element = "span.dtText"
         self.example_element = "span.ex-sent.t"
 
-    def set_parse_url(self, site_data, phrasal_verb):
-        self.url = site_data["url"] + phrasal_verb.replace(" ", "-")
+    def set_parse_url(self, site_data):
+        self.url = site_data["url"] + self.keyword.replace(" ", "-")
+
+    def set_keyword(self, keyword):
+        self.keyword = keyword
 
     def trim_spaces(self, sentences):
         result = []
@@ -52,6 +55,7 @@ class Crawler_merriam(Crawler):
 
             definitions = self.trim_spaces(definitions)
             self.log_parsing_result(len(definitions), len(examples))
+            self.upload_parsed_data(self.site, self.keyword, definitions, examples)
 
         except Exception as e:
             _, _, tb = sys.exc_info()

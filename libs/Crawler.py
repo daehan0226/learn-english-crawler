@@ -1,6 +1,7 @@
 import time
 import sys
 import simplejson
+import requests
 from random import uniform
 
 from selenium.webdriver.common.by import By
@@ -122,6 +123,18 @@ class Crawler:
         self.logging.info(
             f"parsed definition {str(definition_count)}, example {str(example_count)}"
         )
+
+    def upload_parsed_data(self, site, keyword, definitions, examples):
+        URL = config["api_address"]
+        verb, particle = keyword.split(" ", 1)
+        data = {
+            "src": site,
+            "verb": verb,
+            "particle": particle,
+            "definitions": definitions,
+            "examples": examples,
+        }
+        res = requests.post(URL, data=data)
 
     def trim_spaces(self, sentences):
         result = []

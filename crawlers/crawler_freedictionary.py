@@ -15,7 +15,7 @@ class Crawler_freedictionary(Crawler):
             dict_boxes = self.parse_by_selectors(
                 target="def_boxes", css_selectors=["div.ds-list", "div.ds-single"]
             )
-            # TODO definitions = []
+            definitions = []  # TODO
             examples = []
             for dict_box in dict_boxes:
                 # TODO
@@ -33,6 +33,7 @@ class Crawler_freedictionary(Crawler):
                 examples.extend(self.get_text_contents_from_elemets(example_elements))
 
             self.log_parsing_result(len(definitions), len(examples))
+            self.upload_parsed_data(self.site, definitions, examples)
 
         except Exception as e:
             _, _, tb = sys.exc_info()

@@ -5,13 +5,16 @@ from libs.Crawler import Crawler
 
 class Crawler_oxford(Crawler):
     def __init__(self):
-        self.site = 'Oxford'
+        self.site = "Oxford"
         self.dict_boxes = ["ol.senses_multiple", "ol.sense_single"]
         self.definition_element = "span.def"
         self.example_element = "ul.examples > li > span"
 
-    def set_parse_url(self, site_data, phrasal_verb):
-        self.url = site_data["url"] + phrasal_verb.replace(" ", "-")
+    def set_parse_url(self, site_data):
+        self.url = site_data["url"] + self.keyword.replace(" ", "-")
+
+    def set_keyword(self, keyword):
+        self.keyword = keyword
 
     def parse(self):
         try:
@@ -40,9 +43,10 @@ class Crawler_oxford(Crawler):
                     css_selector=self.example_element,
                 )
                 examples.extend(self.get_text_contents_from_elemets(example_elements))
-            
+
             self.log_parsing_result(len(definitions), len(examples))
-                
+            self.upload_parsed_data(self.site, self.keyword, definitions, examples)
+
         except Exception as e:
             _, _, tb = sys.exc_info()
             self.logging.error(f"parse except,  {tb.tb_lineno},  {e.__str__()}")

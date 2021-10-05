@@ -18,10 +18,9 @@ def run_crawler(keyword):
 
     for site, site_data in config["sites"].items():
         try:
-            logging.info(f"parsing for {keyword} started from {site}")
+            logging.info(f"parsing for '{keyword}' started from {site}")
 
             if site == "cambridge":
-                continue
                 cralwer = Crawler_cambridge()
 
             elif site == "freedictionary":
@@ -32,10 +31,10 @@ def run_crawler(keyword):
                 cralwer = Crawler_merriam()
 
             elif site == "oxford":
-                continue
                 cralwer = Crawler_oxford()
 
-            cralwer.set_parse_url(site_data, keyword)
+            cralwer.set_keyword(keyword)
+            cralwer.set_parse_url(site_data)
             cralwer.parse()
             end_time = time.time()
             logging.debug(
@@ -46,5 +45,5 @@ def run_crawler(keyword):
 
 
 if __name__ == "__main__":
-    keyword = "work out"
+    keyword = "fill in"
     run_crawler(keyword)
