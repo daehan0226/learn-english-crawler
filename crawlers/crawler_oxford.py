@@ -4,6 +4,12 @@ from libs.Crawler import Crawler
 
 
 class Crawler_oxford(Crawler):
+    def __init__(self):
+        self.site = 'Oxford'
+        self.dict_boxes = ["ol.senses_multiple", "ol.sense_single"]
+        self.definition_element = "span.def"
+        self.example_element = "ul.examples > li > span"
+
     def set_parse_url(self, site_data, phrasal_verb):
         self.url = site_data["url"] + phrasal_verb.replace(" ", "-")
 
@@ -13,7 +19,8 @@ class Crawler_oxford(Crawler):
             self.driver.get(self.url)
 
             dict_boxes = self.parse_by_selectors(
-                target="def_boxes", css_selectors=["div.def-block.ddef_block"]
+                target="def_boxes",
+                css_selectors=self.dict_boxes,
             )
             definitions = []
             examples = []
@@ -21,19 +28,21 @@ class Crawler_oxford(Crawler):
                 defnition_elements = self.parse_from_src_by_selector(
                     dict_box,
                     target="definition elements",
-                    css_selector="div.def.ddef_d",
+                    css_selector=self.definition_element,
                 )
                 definitions.extend(
                     self.get_text_contents_from_elemets(defnition_elements)
                 )
 
                 example_elements = self.parse_from_src_by_selector(
-                    dict_box, target="example elements", css_selector="span.eg.deg"
+                    dict_box,
+                    target="example elements",
+                    css_selector=self.example_element,
                 )
                 examples.extend(self.get_text_contents_from_elemets(example_elements))
-
-            print(definitions, examples)
-
+            
+            self.log_parsing_result(len(definitions), len(examples))
+                
         except Exception as e:
             _, _, tb = sys.exc_info()
             self.logging.error(f"parse except,  {tb.tb_lineno},  {e.__str__()}")
