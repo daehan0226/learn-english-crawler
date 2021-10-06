@@ -63,6 +63,15 @@ class Crawler:
     def set_parse_url(self):
         return None
 
+    def set_keyword(self):
+        self.keyword = f"{self.verb} {self.particle}"
+
+    def set_verb(self, verb):
+        self.verb = verb
+
+    def set_particle(self, particle):
+        self.particle = particle
+
     def parse_by_selectors(self, target=None, css_selectors=None):
         result = []
         try:

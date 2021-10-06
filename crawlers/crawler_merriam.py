@@ -13,9 +13,6 @@ class Crawler_merriam(Crawler):
     def set_parse_url(self, site_data):
         self.url = site_data["url"] + self.keyword.replace(" ", "-")
 
-    def set_keyword(self, keyword):
-        self.keyword = keyword
-
     def trim_spaces(self, sentences):
         result = []
         for sentence in sentences:

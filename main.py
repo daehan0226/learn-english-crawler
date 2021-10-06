@@ -1,6 +1,7 @@
 import time
 import simplejson
 from libs.Crawler import Crawler
+from libs.helper import get_keywords
 
 from crawlers.crawler_cambridge import Crawler_cambridge
 from crawlers.crawler_freedictionary import Crawler_freedictionary
@@ -11,39 +12,42 @@ json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
-def run_crawler(keyword):
-    start_time = time.time()
+def run_crawler():
     crawler = Crawler()
     logging = crawler.logging
+    keywords = get_keywords(config)
 
-    for site, site_data in config["sites"].items():
-        try:
-            logging.info(f"parsing for '{keyword}' started from {site}")
+    for keyword in keywords:
+        for site, site_data in config["sites"].items():
+            try:
+                if site == "cambridge":
+                    cralwer = Crawler_cambridge()
 
-            if site == "cambridge":
-                cralwer = Crawler_cambridge()
+                elif site == "freedictionary":
+                    continue
+                    cralwer = Crawler_freedictionary()
 
-            elif site == "freedictionary":
-                continue
-                cralwer = Crawler_freedictionary()
+                elif site == "merriam":
+                    cralwer = Crawler_merriam()
 
-            elif site == "merriam":
-                cralwer = Crawler_merriam()
+                elif site == "oxford":
+                    cralwer = Crawler_oxford()
 
-            elif site == "oxford":
-                cralwer = Crawler_oxford()
+                cralwer.set_verb(keyword["verb"])
+                cralwer.set_particle(keyword["particle"])
+                cralwer.set_keyword()
 
-            cralwer.set_keyword(keyword)
-            cralwer.set_parse_url(site_data)
-            cralwer.parse()
-            end_time = time.time()
-            logging.debug(
-                f"site : {site} parsing finished, parsing time : {end_time - start_time}"
-            )
-        except:
-            pass
+                start_time = time.time()
+                logging.info(f"parsing for '{cralwer.keyword}' started from {site}")
+                cralwer.set_parse_url(site_data)
+                cralwer.parse()
+                end_time = time.time()
+                logging.debug(
+                    f"site : {site} parsing finished, parsing time : {end_time - start_time}"
+                )
+            except:
+                pass
 
 
 if __name__ == "__main__":
-    keyword = "get back to"
-    run_crawler(keyword)
+    run_crawler()

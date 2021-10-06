@@ -13,9 +13,6 @@ class Crawler_oxford(Crawler):
     def set_parse_url(self, site_data):
         self.url = site_data["url"] + self.keyword.replace(" ", "-")
 
-    def set_keyword(self, keyword):
-        self.keyword = keyword
-
     def parse(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
