@@ -1,31 +1,25 @@
 import time
-import simplejson
 from libs.Crawler import Crawler
-from libs.helper import get_keywords
+from libs.helper import get_keywords, get_sites, upload_parsed_data
 
 from crawlers.crawler_cambridge import Crawler_cambridge
-from crawlers.crawler_freedictionary import Crawler_freedictionary
 from crawlers.crawler_merriam import Crawler_merriam
 from crawlers.crawler_oxford import Crawler_oxford
 
-json_config = open("./config/config.json").read()
-config = simplejson.loads(json_config)
 
-
-def run_crawler():
+def run_crawler(keyword):
     crawler = Crawler()
     logging = crawler.logging
-    keywords = get_keywords(config)
-
+    keywords = [keyword] if keyword else get_keywords()
+    dictionary_sites = get_sites()
     for keyword in keywords:
-        for site, site_data in config["sites"].items():
+        sites = []
+        definitions = []
+        examples = []
+        for site, site_data in dictionary_sites.items():
             try:
                 if site == "cambridge":
                     cralwer = Crawler_cambridge()
-
-                elif site == "freedictionary":
-                    continue
-                    cralwer = Crawler_freedictionary()
 
                 elif site == "merriam":
                     cralwer = Crawler_merriam()
@@ -33,21 +27,23 @@ def run_crawler():
                 elif site == "oxford":
                     cralwer = Crawler_oxford()
 
-                cralwer.set_verb(keyword["verb"])
-                cralwer.set_particle(keyword["particle"])
-                cralwer.set_keyword()
-
+                logging.info(f"parsing for '{keyword}' started from {site}")
                 start_time = time.time()
-                logging.info(f"parsing for '{cralwer.keyword}' started from {site}")
+                cralwer.set_keyword(keyword)
                 cralwer.set_parse_url(site_data)
                 cralwer.parse()
                 end_time = time.time()
                 logging.debug(
                     f"site : {site} parsing finished, parsing time : {end_time - start_time}"
                 )
+                sites.append(site)
+                definitions.extend(cralwer.definitions)
+                examples.extend(cralwer.examples)
             except:
                 pass
+        upload_parsed_data(keyword, sites, definitions, examples)
 
 
 if __name__ == "__main__":
-    run_crawler()
+    keyword = None
+    run_crawler(keyword)

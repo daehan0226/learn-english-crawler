@@ -1,5 +1,8 @@
 import sys
 
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 from libs.Crawler import Crawler
 
 
@@ -25,8 +28,13 @@ class Crawler_merriam(Crawler):
     def parse(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
-            self.driver.get(self.url)
-
+            self.wait.until(
+                EC.presence_of_all_elements_located(
+                    (By.CSS_SELECTOR, self.dict_boxes[0])
+                )
+            )
+            # self.driver.get(self.url)
+            # self.driver.execute_script("location.reload()")
             contents = self.parse_by_selectors(
                 target="def_boxes", css_selectors=self.dict_boxes
             )
@@ -50,9 +58,9 @@ class Crawler_merriam(Crawler):
                 )
                 examples.extend(self.get_text_contents_from_elemets(example_elements))
 
-            definitions = self.trim_spaces(definitions)
-            self.log_parsing_result(len(definitions), len(examples))
-            self.upload_parsed_data(self.site, self.keyword, definitions, examples)
+            self.definitions = self.remove_duplicates(definitions)
+            self.examples = self.filter_if_not_include_keyword(examples)
+            self.log_parsing_result(len(self.definitions), len(self.examples))
 
         except Exception as e:
             _, _, tb = sys.exc_info()

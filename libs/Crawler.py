@@ -4,10 +4,13 @@ import simplejson
 import requests
 from random import uniform
 
+from retry import retry
+from timeout_decorator import timeout, TimeoutError
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
+from libs.helper import get_verb_particle_from_keyword
 
 from libs.logger import get_logger
 
@@ -63,14 +66,21 @@ class Crawler:
     def set_parse_url(self):
         return None
 
-    def set_keyword(self):
-        self.keyword = f"{self.verb} {self.particle}"
+    def set_keyword(self, keyword):
+        self.keyword = keyword
 
-    def set_verb(self, verb):
-        self.verb = verb
+    def remove_duplicates(self, data_list):
+        return list(set(data_list)) if data_list else data_list
 
-    def set_particle(self, particle):
-        self.particle = particle
+    def filter_if_not_include_keyword(self, sentences):
+        result = []
+        verb, particle = get_verb_particle_from_keyword(self.keyword)
+
+        for sentence in sentences:
+            if verb in sentence or particle in sentence:
+                result.append(sentence)
+
+        return self.remove_duplicates(result)
 
     def parse_by_selectors(self, target=None, css_selectors=None):
         result = []
@@ -115,10 +125,6 @@ class Crawler:
             text_elements = src.find_elements(By.XPATH, "./*")
             for text_ele in text_elements:
                 if text_ele.get_attribute("class") != exclude:
-                    print(
-                        text_ele.get_attribute("class"),
-                        text_ele.get_attribute("textContent").strip(),
-                    )
                     result.extend(text_ele.get_attribute("textContent").strip())
 
         except Exception as e:
@@ -132,17 +138,6 @@ class Crawler:
         self.logging.info(
             f"parsed definition {str(definition_count)}, example {str(example_count)}"
         )
-
-    def upload_parsed_data(self, site, keyword, definitions, examples):
-        verb, particle = keyword.split(" ", 1)
-        URL = f'{config["api_address"]}/{verb}'
-        data = {
-            "src": site,
-            "particle": particle,
-            "definitions": definitions,
-            "examples": examples,
-        }
-        res = requests.put(URL, data=data)
 
     def trim_spaces(self, sentences):
         result = []

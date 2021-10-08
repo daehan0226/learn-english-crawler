@@ -40,8 +40,9 @@ class Crawler_cambridge(Crawler):
                 )
                 examples.extend(self.get_text_contents_from_elemets(example_elements))
 
-            self.log_parsing_result(len(definitions), len(examples))
-            self.upload_parsed_data(self.site, self.keyword, definitions, examples)
+            self.definitions = self.remove_duplicates(definitions)
+            self.examples = self.filter_if_not_include_keyword(examples)
+            self.log_parsing_result(len(self.definitions), len(self.examples))
 
         except Exception as e:
             _, _, tb = sys.exc_info()
