@@ -40,7 +40,8 @@ def run_crawler(keyword):
                 start_time = time.time()
                 cralwer.set_keyword(keyword)
                 cralwer.set_parse_url(site_data)
-                cralwer.parse()
+                cralwer.load_url(cralwer.url)
+                cralwer.parse()     
                 end_time = time.time()
                 logging.debug(
                     f"site : {site} parsing finished, parsing time : {end_time - start_time}"
@@ -54,5 +55,5 @@ def run_crawler(keyword):
     cralwer.close()
 
 if __name__ == "__main__":
-    keyword = "give up"
+    keyword = None
     run_crawler(keyword)

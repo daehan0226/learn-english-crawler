@@ -28,8 +28,6 @@ class CrawlerMerriam(Crawler):
     def parse(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
-            self.driver.get(self.url)
-            self.driver.execute_script("location.reload()")
             contents = self.parse_by_selectors(
                 target="def_boxes", css_selectors=self.dict_boxes
             )

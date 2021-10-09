@@ -63,6 +63,9 @@ class Crawler:
             except:
                 pass
 
+    def load_url(self, url):
+        self.driver.get(url)
+
     def set_parse_url(self):
         return None
 

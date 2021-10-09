@@ -15,8 +15,6 @@ class CrawlerMacmillan(Crawler):
     def parse(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
-            self.driver.get(self.url)
-
             definitions = []
             examples = []
             defnition_elements = self.get_elements_by_selector(
