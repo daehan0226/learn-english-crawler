@@ -1,6 +1,7 @@
 import simplejson
 import requests
 from datetime import datetime
+import re
 
 
 json_config = open("./config/config.json").read()
@@ -33,6 +34,16 @@ def get_token():
     return res.json()["result"]
 
 
+def set_header():
+    headers = requests.utils.default_headers()
+    headers.update(
+        {
+            "User-Agent": "My User Agent 1.0",
+        }
+    )
+    return headers
+
+
 def upload_parsed_data(keyword, sites, definitions, examples):
     try:
         verb, particle = get_verb_particle_from_keyword(keyword)
@@ -49,3 +60,18 @@ def upload_parsed_data(keyword, sites, definitions, examples):
         return True
     except:
         return False
+
+
+def trim_spaces(sentences):
+    result = []
+    for sentence in sentences:
+        if sentence.startswith(": "):
+            sentence = sentence[2:]
+            sentence = " ".join(sentence.splitlines())
+        result.append(sentence.strip())
+
+    return result
+
+
+def remove_duplicates(sentences):
+    return list(set(sentences)) if sentences else sentences

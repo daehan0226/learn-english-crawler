@@ -1,14 +1,21 @@
-
+import sys
 import time
 from crawlers.CrawlerCollins import CrawlerCollins
 from libs.Crawler import Crawler
-from libs.helper import get_keywords, get_sites, upload_parsed_data
+from libs.helper import (
+    get_keywords,
+    get_sites,
+    trim_spaces,
+    upload_parsed_data,
+    remove_duplicates,
+)
 
 from crawlers.CrawlerCambridge import CrawlerCambridge
 from crawlers.CrawlerMerriam import CrawlerMerriam
 from crawlers.CrawlerOxford import CrawlerOxford
 from crawlers.CrawlerMacmillan import CrawlerMacmillan
 from crawlers.CrawlerCollins import CrawlerCollins
+
 
 def run_crawler(keyword):
     crawler = Crawler()
@@ -29,10 +36,10 @@ def run_crawler(keyword):
 
                 elif site == "oxford":
                     cralwer = CrawlerOxford()
-                
+
                 elif site == "macmillan":
                     cralwer = CrawlerMacmillan()
-                    
+
                 elif site == "collins":
                     cralwer = CrawlerCollins()
 
@@ -40,8 +47,8 @@ def run_crawler(keyword):
                 start_time = time.time()
                 cralwer.set_keyword(keyword)
                 cralwer.set_parse_url(site_data)
-                cralwer.load_url(cralwer.url)
-                cralwer.parse()     
+                cralwer.load()
+                cralwer.parse()
                 end_time = time.time()
                 logging.debug(
                     f"site : {site} parsing finished, parsing time : {end_time - start_time}"
@@ -49,10 +56,14 @@ def run_crawler(keyword):
                 sites.append(site)
                 definitions.extend(cralwer.definitions)
                 examples.extend(cralwer.examples)
-            except:
-                pass
-        upload_parsed_data(keyword, sites, definitions, examples)
-    cralwer.close()
+
+            except Exception as e:
+                _, _, tb = sys.exc_info()
+                logging.error(f"{tb.tb_lineno},  {e.__str__()}")
+        print(trim_spaces(remove_duplicates(definitions)))
+        print(trim_spaces(remove_duplicates(examples)))
+        # upload_parsed_data(keyword, sites, definitions, examples)
+
 
 if __name__ == "__main__":
     keyword = None
