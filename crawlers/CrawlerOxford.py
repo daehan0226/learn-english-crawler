@@ -1,14 +1,17 @@
 import sys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 
 from libs.Crawler import Crawler
 
 
-class Crawler_cambridge(Crawler):
+class CrawlerOxford(Crawler):
     def __init__(self):
-        self.site = "Cambridge"
-        self.dict_boxes = ["div.def-block.ddef_block"]
-        self.definition_element = "div.def.ddef_d"
-        self.example_element = "span.eg.deg"
+        self.site = "Oxford"
+        self.dict_boxes = ["ol.senses_multiple", "ol.sense_single"]
+        self.definition_element = "span.def"
+        self.example_element = "ul.examples > li > span"
 
     def set_parse_url(self, site_data):
         self.url = site_data["url"] + self.keyword.replace(" ", "-")
@@ -17,10 +20,13 @@ class Crawler_cambridge(Crawler):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
             self.driver.get(self.url)
+            self.driver.execute_script("location.reload()")
 
             dict_boxes = self.parse_by_selectors(
-                target="def_boxes", css_selectors=self.dict_boxes
+                target="def_boxes",
+                css_selectors=self.dict_boxes,
             )
+
             definitions = []
             examples = []
             for dict_box in dict_boxes:

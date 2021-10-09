@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from libs.Crawler import Crawler
 
 
-class Crawler_merriam(Crawler):
+class CrawlerMerriam(Crawler):
     def __init__(self):
         self.site = "Merriam"
         self.dict_boxes = ["div.left-content"]
@@ -28,13 +28,8 @@ class Crawler_merriam(Crawler):
     def parse(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
-            self.wait.until(
-                EC.presence_of_all_elements_located(
-                    (By.CSS_SELECTOR, self.dict_boxes[0])
-                )
-            )
-            # self.driver.get(self.url)
-            # self.driver.execute_script("location.reload()")
+            self.driver.get(self.url)
+            self.driver.execute_script("location.reload()")
             contents = self.parse_by_selectors(
                 target="def_boxes", css_selectors=self.dict_boxes
             )
