@@ -10,7 +10,7 @@ config = simplejson.loads(json_config)
 
 def get_keywords():
     result = []
-    URL = f'{config["api_address"]}/phrasal-verbs/dictionary-empty'
+    URL = f'{config["api_address"]}/{config["api_endpoint_keywords"]}'
     res = requests.get(URL)
 
     for phrasal_verb in res.json()["result"]:
@@ -28,7 +28,7 @@ def get_verb_particle_from_keyword(keyword):
 
 
 def get_token():
-    URL = f'{config["api_address"]}/sessions/'
+    URL = f'{config["api_address"]}/{config["api_endpoint_token"]}/'
     data = {"username": config["username"], "password": config["password"]}
     res = requests.post(URL, data=data)
     return res.json()["result"]["session"]
@@ -47,7 +47,7 @@ def set_header():
 def upload_parsed_data(keyword, sites, definitions, examples):
     try:
         verb, particle = get_verb_particle_from_keyword(keyword)
-        URL = f'{config["api_address"]}/phrasal-verbs/{verb}'
+        URL = f'{config["api_address"]}/{config["api_endpoint_phreal_verb"]}/{verb}'
         data = {
             "dictionaries": sites,
             "particle": particle,
