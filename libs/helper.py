@@ -31,7 +31,7 @@ def get_token():
     URL = f'{config["api_address"]}/sessions/'
     data = {"username": config["username"], "password": config["password"]}
     res = requests.post(URL, data=data)
-    return res.json()["result"]
+    return res.json()["result"]["session"]
 
 
 def set_header():
@@ -53,12 +53,13 @@ def upload_parsed_data(keyword, sites, definitions, examples):
             "particle": particle,
             "definitions": definitions,
             "examples": examples,
-            "datetme": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+            "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
         }
         headers = {"Authorization": get_token()}
         res = requests.put(URL, data=data, headers=headers)
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 

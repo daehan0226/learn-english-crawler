@@ -60,9 +60,12 @@ def run_crawler(keyword):
             except Exception as e:
                 _, _, tb = sys.exc_info()
                 logging.error(f"{tb.tb_lineno},  {e.__str__()}")
-        print(trim_spaces(remove_duplicates(definitions)))
-        print(trim_spaces(remove_duplicates(examples)))
-        # upload_parsed_data(keyword, sites, definitions, examples)
+        upload_parsed_data(
+            keyword,
+            sites,
+            trim_spaces(remove_duplicates(definitions)),
+            trim_spaces(remove_duplicates(examples)),
+        )
 
 
 if __name__ == "__main__":
