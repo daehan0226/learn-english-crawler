@@ -1,12 +1,14 @@
 
 import time
+from crawlers.CrawlerCollins import CrawlerCollins
 from libs.Crawler import Crawler
 from libs.helper import get_keywords, get_sites, upload_parsed_data
 
 from crawlers.CrawlerCambridge import CrawlerCambridge
 from crawlers.CrawlerMerriam import CrawlerMerriam
 from crawlers.CrawlerOxford import CrawlerOxford
-from crawlers.CrawlerMacmillan import crawlerMacmillan
+from crawlers.CrawlerMacmillan import CrawlerMacmillan
+from crawlers.CrawlerCollins import CrawlerCollins
 
 def run_crawler(keyword):
     crawler = Crawler()
@@ -20,19 +22,19 @@ def run_crawler(keyword):
         for site, site_data in dictionary_sites.items():
             try:
                 if site == "cambridge":
-                    continue
                     cralwer = CrawlerCambridge()
 
                 elif site == "merriam":
-                    continue
                     cralwer = CrawlerMerriam()
 
                 elif site == "oxford":
-                    continue
                     cralwer = CrawlerOxford()
                 
                 elif site == "macmillan":
-                    cralwer = crawlerMacmillan()
+                    cralwer = CrawlerMacmillan()
+                    
+                elif site == "collins":
+                    cralwer = CrawlerCollins()
 
                 logging.info(f"parsing for '{keyword}' started from {site}")
                 start_time = time.time()
@@ -48,8 +50,7 @@ def run_crawler(keyword):
                 examples.extend(cralwer.examples)
             except:
                 pass
-        print(keyword, sites, definitions, examples)
-        # upload_parsed_data(keyword, sites, definitions, examples)
+        upload_parsed_data(keyword, sites, definitions, examples)
     cralwer.close()
 
 if __name__ == "__main__":

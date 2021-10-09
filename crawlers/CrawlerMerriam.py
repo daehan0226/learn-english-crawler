@@ -37,7 +37,7 @@ class CrawlerMerriam(Crawler):
             definitions = []
             examples = []
             for content in contents:
-                defnition_elements = self.parse_from_src_by_selector(
+                defnition_elements = self.get_elements_by_selector(
                     content,
                     target="definition elements",
                     css_selector=self.definition_element,
@@ -46,7 +46,7 @@ class CrawlerMerriam(Crawler):
                     self.get_text_contents_from_elemets(defnition_elements)
                 )
 
-                example_elements = self.parse_from_src_by_selector(
+                example_elements = self.get_elements_by_selector(
                     content,
                     target="example elements",
                     css_selector=self.example_element,

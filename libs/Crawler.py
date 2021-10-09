@@ -94,14 +94,27 @@ class Crawler:
                 f"parse {target} except {str(tb.tb_lineno)}, {e.__str__()}"
             )
         return result
-
-    def parse_from_src_by_selector(self, src, target=None, css_selector=None):
+    
+    
+    def get_elements_by_selector(self, src, target=None, css_selector=None):
         result = []
         try:
             result = src.find_elements(By.CSS_SELECTOR, css_selector)
         except Exception as e:
             _, _, tb = sys.exc_info()
             self.logging.error(
+                f"parse {target} except {str(tb.tb_lineno)}, {e.__str__()}"
+            )
+        return result
+    
+    
+    def get_an_element_by_selector(self, src, target=None, css_selector=None):
+        result = None
+        try:
+            result = src.find_element(By.CSS_SELECTOR, css_selector)
+        except Exception as e:
+            _, _, tb = sys.exc_info()
+            self.logging.debug(
                 f"parse {target} except {str(tb.tb_lineno)}, {e.__str__()}"
             )
         return result
@@ -116,6 +129,19 @@ class Crawler:
             _, _, tb = sys.exc_info()
             self.logging.error(
                 f"parse text contents except {str(tb.tb_lineno)}, {e.__str__()}"
+            )
+        return result
+    
+    
+    def get_text_content_from_elemet(self, element):
+        result = ""
+        try:
+            result = element.get_attribute("textContent").strip()
+
+        except Exception as e:
+            _, _, tb = sys.exc_info()
+            self.logging.error(
+                f"parse text content except {str(tb.tb_lineno)}, {e.__str__()}"
             )
         return result
 
@@ -146,4 +172,17 @@ class Crawler:
                 sentence = sentence[2:]
             sentence = sentence.strip()
             result.append(sentence)
+        return result
+
+    def return_if_has_css_selector_classname(self, src, class_name):
+        result = False
+        try:
+            result = src.find_elements(By.CSS_SELECTOR, class_name)
+            print(result)
+            return result
+        except Exception as e:
+            _, _, tb = sys.exc_info()
+            self.logging.error(
+                f"check if it has css selector class {class_name} except {str(tb.tb_lineno)}, {e.__str__()}"
+            )
         return result

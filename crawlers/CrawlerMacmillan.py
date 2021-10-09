@@ -3,7 +3,7 @@ import sys
 from libs.Crawler import Crawler
 
 
-class crawlerMacmillan(Crawler):
+class CrawlerMacmillan(Crawler):
     def __init__(self):
         self.site = "Macmillan"
         self.definition_element = "span.DEFINITION"
@@ -19,7 +19,7 @@ class crawlerMacmillan(Crawler):
 
             definitions = []
             examples = []
-            defnition_elements = self.parse_from_src_by_selector(
+            defnition_elements = self.get_elements_by_selector(
                 self.driver,
                 target="definition elements",
                 css_selector=self.definition_element,
@@ -28,7 +28,7 @@ class crawlerMacmillan(Crawler):
                 self.get_text_contents_from_elemets(defnition_elements)
             )
 
-            example_elements = self.parse_from_src_by_selector(
+            example_elements = self.get_elements_by_selector(
                 self.driver,
                 target="example elements",
                 css_selector=self.example_element,
