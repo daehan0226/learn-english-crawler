@@ -12,10 +12,13 @@ def get_keywords(logging):
         result = []
         URL = f'{config["api_address"]}/{config["api_endpoint_keywords"]}'
         res = requests.get(URL)
+        phrasal_verbs = res.json()["result"]
 
-        for phrasal_verb in res.json()["result"]:
-            result.append(f"{phrasal_verb['verb']} {phrasal_verb['particle']}")
-
+        for phrasal_verb in phrasal_verbs:
+            verb = phrasal_verb["verb"]
+            particle = phrasal_verb["particle"]
+            result.append(f"{verb} {particle}")
+        logging.info(f"{len(phrasal_verbs)} to crawl ")
         return result
     except Exception as e:
         _, _, tb = sys.exc_info()

@@ -1,5 +1,4 @@
 import sys
-
 from libs.Crawler import Crawler
 
 

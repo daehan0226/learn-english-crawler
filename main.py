@@ -19,6 +19,7 @@ from crawlers.CrawlerCollins import CrawlerCollins
 def run_crawler(keyword):
     crawler = Crawler()
     logging = crawler.logging
+    logging.info("================Crawler started==============")
     keywords = [keyword] if keyword else get_keywords(logging)
     dictionary_sites = get_sites()
     for keyword in keywords:
@@ -66,6 +67,8 @@ def run_crawler(keyword):
             trim_spaces(remove_duplicates(definitions)),
             trim_spaces(remove_duplicates(examples)),
         )
+
+    logging.info("================Crawler finished==============")
 
 
 if __name__ == "__main__":
