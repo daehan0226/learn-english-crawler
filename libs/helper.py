@@ -1,22 +1,26 @@
+import sys
 import simplejson
 import requests
 from datetime import datetime
-import re
-
 
 json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
-def get_keywords():
-    result = []
-    URL = f'{config["api_address"]}/{config["api_endpoint_keywords"]}'
-    res = requests.get(URL)
+def get_keywords(logging):
+    try:
+        result = []
+        URL = f'{config["api_address"]}/{config["api_endpoint_keywords"]}'
+        res = requests.get(URL)
 
-    for phrasal_verb in res.json()["result"]:
-        result.append(f"{phrasal_verb['verb']} {phrasal_verb['particle']}")
+        for phrasal_verb in res.json()["result"]:
+            result.append(f"{phrasal_verb['verb']} {phrasal_verb['particle']}")
 
-    return result
+        return result
+    except Exception as e:
+        _, _, tb = sys.exc_info()
+        logging.error(f"API get_keywords ERROR {tb.tb_lineno},  {e.__str__()}")
+        return []
 
 
 def get_sites():
@@ -27,11 +31,17 @@ def get_verb_particle_from_keyword(keyword):
     return keyword.split(" ", 1)
 
 
-def get_token():
-    URL = f'{config["api_address"]}/{config["api_endpoint_token"]}/'
-    data = {"username": config["username"], "password": config["password"]}
-    res = requests.post(URL, data=data)
-    return res.json()["result"]["session"]
+def get_token(logging):
+    try:
+        URL = f'{config["api_address"]}/{config["api_endpoint_token"]}/'
+        data = {"username": config["username"], "password": config["password"]}
+        res = requests.post(URL, data=data)
+        return res.json()["result"]["session"]
+
+    except Exception as e:
+        _, _, tb = sys.exc_info()
+        logging.error(f"API get_token ERROR {tb.tb_lineno},  {e.__str__()}")
+        return False
 
 
 def set_header():
@@ -44,7 +54,7 @@ def set_header():
     return headers
 
 
-def upload_parsed_data(keyword, sites, definitions, examples):
+def upload_parsed_data(logging, keyword, sites, definitions, examples):
     try:
         verb, particle = get_verb_particle_from_keyword(keyword)
         URL = f'{config["api_address"]}/{config["api_endpoint_phreal_verb"]}/{verb}'
@@ -55,11 +65,14 @@ def upload_parsed_data(keyword, sites, definitions, examples):
             "examples": examples,
             "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
         }
-        headers = {"Authorization": get_token()}
-        res = requests.put(URL, data=data, headers=headers)
-        return True
+        token = get_token(logging)
+        if token:
+            headers = {"Authorization": token}
+            res = requests.put(URL, data=data, headers=headers)
+            return True
     except Exception as e:
-        print(e)
+        _, _, tb = sys.exc_info()
+        logging.error(f"API upload_parsed_data ERROR {tb.tb_lineno},  {e.__str__()}")
         return False
 
 

@@ -1,6 +1,5 @@
 import sys
 import time
-from crawlers.CrawlerCollins import CrawlerCollins
 from libs.Crawler import Crawler
 from libs.helper import (
     get_keywords,
@@ -20,7 +19,7 @@ from crawlers.CrawlerCollins import CrawlerCollins
 def run_crawler(keyword):
     crawler = Crawler()
     logging = crawler.logging
-    keywords = [keyword] if keyword else get_keywords()
+    keywords = [keyword] if keyword else get_keywords(logging)
     dictionary_sites = get_sites()
     for keyword in keywords:
         sites = []
@@ -61,6 +60,7 @@ def run_crawler(keyword):
                 _, _, tb = sys.exc_info()
                 logging.error(f"{tb.tb_lineno},  {e.__str__()}")
         upload_parsed_data(
+            logging,
             keyword,
             sites,
             trim_spaces(remove_duplicates(definitions)),
