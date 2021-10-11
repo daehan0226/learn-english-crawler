@@ -76,5 +76,5 @@ def run_crawler(keyword):
 
 
 if __name__ == "__main__":
-    keyword = "get out"
+    keyword = None
     run_crawler(keyword)
