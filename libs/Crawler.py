@@ -2,7 +2,7 @@ import simplejson
 import requests
 from bs4 import BeautifulSoup
 
-from libs.helper import get_verb_particle_from_keyword, set_header
+from libs.helper import get_verb_particle_from_keyword
 from libs.logger import get_logger
 
 json_config = open("./config/config.json").read()
@@ -13,10 +13,15 @@ class Crawler:
     logging = get_logger(config)
     doc = None
 
+    def set_header(self):
+        headers = requests.utils.default_headers()
+        headers.update({"User-Agent": "My User Agent 1.0"})
+        return headers
+
     def load(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
-            r = requests.get(self.url, headers=set_header())
+            r = requests.get(self.url, headers=self.set_header())
             self.doc = BeautifulSoup(r.text, "lxml")
 
         except Exception as e:

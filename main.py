@@ -1,12 +1,11 @@
 import sys
 import time
+import simplejson
 from random import uniform
+from libs.ApiHandler import ApiHandler
 from libs.Crawler import Crawler
 from libs.helper import (
-    get_keywords,
-    get_sites,
     trim_spaces,
-    upload_parsed_data,
     remove_duplicates,
 )
 
@@ -17,17 +16,21 @@ from crawlers.CrawlerMacmillan import CrawlerMacmillan
 from crawlers.CrawlerCollins import CrawlerCollins
 
 
+json_config = open("./config/config.json").read()
+config = simplejson.loads(json_config)
+
+
 def run_crawler(keyword):
     crawler = Crawler()
     logging = crawler.logging
     logging.info("================Crawler started==============")
-    keywords = [keyword] if keyword else get_keywords(logging)
-    dictionary_sites = get_sites()
+    api = ApiHandler(logging, config["api"])
+    keywords = [keyword] if keyword else api.get_keywords()
     for keyword in keywords:
         sites = []
         definitions = []
         examples = []
-        for site, site_data in dictionary_sites.items():
+        for site, site_data in config["sites"].items():
             try:
                 if site == "cambridge":
                     cralwer = CrawlerCambridge()
@@ -62,8 +65,7 @@ def run_crawler(keyword):
             except Exception as e:
                 _, _, tb = sys.exc_info()
                 logging.error(f"{tb.tb_lineno},  {e.__str__()}")
-        upload_parsed_data(
-            logging,
+        api.upload_parsed_data(
             keyword,
             sites,
             trim_spaces(remove_duplicates(definitions)),
@@ -74,5 +76,5 @@ def run_crawler(keyword):
 
 
 if __name__ == "__main__":
-    keyword = None
+    keyword = "get out"
     run_crawler(keyword)
