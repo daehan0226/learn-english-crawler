@@ -1,5 +1,6 @@
 import sys
 import time
+from random import uniform
 from libs.Crawler import Crawler
 from libs.helper import (
     get_keywords,
@@ -53,6 +54,7 @@ def run_crawler(keyword):
                 logging.debug(
                     f"site : {site} parsing finished, parsing time : {end_time - start_time}"
                 )
+                time.sleep(uniform(1, 2))
                 sites.append(site)
                 definitions.extend(cralwer.definitions)
                 examples.extend(cralwer.examples)

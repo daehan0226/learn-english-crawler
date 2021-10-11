@@ -1,5 +1,3 @@
-import time
-import sys
 import simplejson
 import requests
 from bs4 import BeautifulSoup
@@ -22,7 +20,7 @@ class Crawler:
             self.doc = BeautifulSoup(r.text, "lxml")
 
         except Exception as e:
-            print(e)
+            self.logging.error(f"get request error {e.__str__()}")
 
     def set_parse_url(self):
         return None
