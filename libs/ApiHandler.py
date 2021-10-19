@@ -2,7 +2,7 @@ import sys
 import requests
 from datetime import datetime
 
-from libs.helper import get_verb_particle_from_keyword
+from libs.helper import get_verb_particle_from_keyword, replace_space_to_hyphen
 
 
 class ApiHandler:
@@ -46,11 +46,10 @@ class ApiHandler:
 
     def upload_parsed_data(self, keyword, sites, definitions, examples):
         try:
-            verb, particle = get_verb_particle_from_keyword(keyword)
-            URL = f'{self.api_address}/{self.api_endpoints["phreal_verb"]}/{verb}'
+            phrasal_verb = replace_space_to_hyphen(keyword)
+            URL = f'{self.api_address}/{self.api_endpoints["phrasal_verb"]}/{phrasal_verb}'
             data = {
                 "dictionaries": sites,
-                "particle": particle,
                 "definitions": definitions,
                 "examples": examples,
                 "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),

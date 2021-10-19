@@ -3,6 +3,10 @@ def get_verb_particle_from_keyword(keyword):
     return keyword.split(" ", 1)
 
 
+def replace_space_to_hyphen(string):
+    return string.replace(" ", "-")
+
+
 # TODO - check sentence is string and not empty string
 def trim_spaces(sentences):
     result = []
