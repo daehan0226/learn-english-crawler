@@ -2,8 +2,6 @@ import sys
 import requests
 from datetime import datetime
 
-from libs.helper import get_verb_particle_from_keyword, replace_space_to_hyphen
-
 
 class ApiHandler:
     def __init__(self, logging, config):
@@ -19,7 +17,10 @@ class ApiHandler:
             res = requests.get(URL)
             phrasal_verbs = res.json()["result"]
             result = [
-                f"{phrasal_verb['verb']} {phrasal_verb['particle']}"
+                {
+                    "keyword": f"{phrasal_verb['verb']} {phrasal_verb['particle']}",
+                    "_id": {phrasal_verb["_id"]},
+                }
                 for phrasal_verb in phrasal_verbs
             ]
             self.logging.info(f"{len(phrasal_verbs)} to crawl ")
@@ -44,10 +45,9 @@ class ApiHandler:
             self.logging.error(f"API get_token ERROR {tb.tb_lineno},  {e.__str__()}")
             return False
 
-    def upload_parsed_data(self, keyword, sites, definitions, examples):
+    def upload_parsed_data(self, _id, sites, definitions, examples):
         try:
-            phrasal_verb = replace_space_to_hyphen(keyword)
-            URL = f'{self.api_address}/{self.api_endpoints["phrasal_verb"]}/{phrasal_verb}'
+            URL = f'{self.api_address}/{self.api_endpoints["phrasal_verb"]}/{_id}'
             data = {
                 "dictionaries": sites,
                 "definitions": definitions,

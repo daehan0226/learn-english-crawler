@@ -20,13 +20,12 @@ json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
-def run_crawler(keyword):
+def run_crawler():
     crawler = Crawler()
     logging = crawler.logging
     logging.info("================Crawler started==============")
     api = ApiHandler(logging, config["api"])
-    keywords = [keyword] if keyword else api.get_keywords()
-    for keyword in keywords:
+    for item in api.get_keywords():
         sites = []
         definitions = []
         examples = []
@@ -47,9 +46,9 @@ def run_crawler(keyword):
                 elif site == "collins":
                     cralwer = CrawlerCollins()
 
-                logging.info(f"parsing for '{keyword}' started from {site}")
+                logging.info(f"parsing for {item['keyword']} started from {site}")
                 start_time = time.time()
-                cralwer.set_keyword(keyword)
+                cralwer.set_keyword(item["keyword"])
                 cralwer.set_parse_url(site_data)
                 cralwer.load()
                 cralwer.parse()
@@ -66,7 +65,7 @@ def run_crawler(keyword):
                 _, _, tb = sys.exc_info()
                 logging.error(f"{tb.tb_lineno},  {e.__str__()}")
         api.upload_parsed_data(
-            keyword,
+            item["_id"],
             sites,
             trim_spaces(remove_duplicates(definitions)),
             trim_spaces(remove_duplicates(examples)),
@@ -76,5 +75,4 @@ def run_crawler(keyword):
 
 
 if __name__ == "__main__":
-    keyword = None
-    run_crawler(keyword)
+    run_crawler()
