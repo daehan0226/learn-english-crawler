@@ -19,7 +19,7 @@ class ApiHandler:
             result = [
                 {
                     "keyword": f"{phrasal_verb['verb']} {phrasal_verb['particle']}",
-                    "_id": {phrasal_verb["_id"]},
+                    "_id": phrasal_verb["_id"],
                 }
                 for phrasal_verb in phrasal_verbs
             ]
