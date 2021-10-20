@@ -25,7 +25,7 @@ def run_crawler():
     logging = crawler.logging
     logging.info("================Crawler started==============")
     api = ApiHandler(logging, config["api"])
-    for item in api.get_keywords():
+    for keyword in api.get_keywords():
         sites = []
         definitions = []
         examples = []
@@ -46,9 +46,9 @@ def run_crawler():
                 elif site == "collins":
                     cralwer = CrawlerCollins()
 
-                logging.info(f"parsing for {item['keyword']} started from {site}")
+                logging.info(f"parsing for {keyword} started from {site}")
                 start_time = time.time()
-                cralwer.set_keyword(item["keyword"])
+                cralwer.set_keyword(keyword)
                 cralwer.set_parse_url(site_data)
                 cralwer.load()
                 cralwer.parse()
@@ -65,7 +65,7 @@ def run_crawler():
                 _, _, tb = sys.exc_info()
                 logging.error(f"{tb.tb_lineno},  {e.__str__()}")
         api.upload_parsed_data(
-            item["_id"],
+            keyword,
             sites,
             trim_spaces(remove_duplicates(definitions)),
             trim_spaces(remove_duplicates(examples)),
