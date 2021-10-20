@@ -8,9 +8,6 @@ class CrawlerMacmillan(Crawler):
         self.definition_element = ["span", "DEFINITION"]
         self.example_element = ["p", "EXAMPLE"]
 
-    def set_parse_url(self, site_data):
-        self.url = site_data["url"] + self.keyword.replace(" ", "-")
-
     def parse(self):
         try:
             definitions = []

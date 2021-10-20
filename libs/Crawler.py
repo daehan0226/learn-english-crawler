@@ -27,8 +27,8 @@ class Crawler:
         except Exception as e:
             self.logging.error(f"get request error {e.__str__()}")
 
-    def set_parse_url(self):
-        return None
+    def set_parse_url(self, site_data):
+        self.url = site_data["url"] + self.keyword.replace(" ", "-")
 
     def set_keyword(self, keyword):
         self.keyword = keyword

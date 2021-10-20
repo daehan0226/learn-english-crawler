@@ -9,9 +9,6 @@ class CrawlerCollins(Crawler):
         self.definition_element = ["div", "def"]
         self.example_element = ["span", "quote"]
 
-    def set_parse_url(self, site_data):
-        self.url = site_data["url"] + self.keyword.replace(" ", "-")
-
     def parse(self):
         try:
             dictionary_cards = self.find_elements(self.dictionary_cards)

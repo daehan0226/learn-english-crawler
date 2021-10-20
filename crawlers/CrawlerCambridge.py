@@ -9,9 +9,6 @@ class CrawlerCambridge(Crawler):
         self.definition_element = ["div", ["def", "ddef_d", "db"]]
         self.example_element = ["span", "eg"]
 
-    def set_parse_url(self, site_data):
-        self.url = site_data["url"] + self.keyword.replace(" ", "-")
-
     def parse(self):
         try:
             dictionary_cards = self.find_elements(self.dictionary_cards)
