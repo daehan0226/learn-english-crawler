@@ -2,7 +2,7 @@ import simplejson
 import requests
 from bs4 import BeautifulSoup
 
-from libs.helper import filter_sentences_if_not_include_keyword, separate_by_space
+from libs.helper import replace_space_to_hyphen
 from libs.logger import get_logger
 
 json_config = open("./config/config.json").read()
@@ -10,7 +10,7 @@ config = simplejson.loads(json_config)
 
 
 class Crawler:
-    logging = get_logger(config)
+    logging = get_logger(config["log_dir"])
     doc = None
 
     def set_header(self):
@@ -28,10 +28,10 @@ class Crawler:
             self.logging.error(f"get request error {e.__str__()}")
 
     def set_parse_url(self, site_data):
-        self.url = site_data["url"] + self.keyword.replace(" ", "-")
+        self.url = site_data["url"] + self.keyword
 
     def set_keyword(self, keyword):
-        self.keyword = keyword
+        self.keyword = replace_space_to_hyphen(keyword)
 
     def log_parsing_result(self, definition_count, example_count):
         self.logging.info(

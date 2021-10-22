@@ -2,8 +2,6 @@ import sys
 import requests
 from datetime import datetime
 
-from libs.helper import replace_space_to_hyphen
-
 
 class ApiHandler:
     def __init__(self, logging, config):
@@ -13,16 +11,13 @@ class ApiHandler:
         self.username = config["username"]
         self.password = config["password"]
 
-    def get_keywords(self):
+    def get_keywords(self, type_):
         try:
-            URL = f'{self.api_address}/{self.api_endpoints["keywords"]}'
+            if type_ == "phrasal_verb":
+                URL = f'{self.api_address}/{self.api_endpoints["keywords"]}'
             res = requests.get(URL)
-            phrasal_verbs = res.json()["result"]
-            result = [
-                f"{phrasal_verb['verb']} {phrasal_verb['particle']}"
-                for phrasal_verb in phrasal_verbs
-            ]
-            self.logging.info(f"{len(phrasal_verbs)} to crawl ")
+            result = res.json()["result"]
+            self.logging.info(f"{len(result)} to crawl ")
             return result
         except Exception as e:
             _, _, tb = sys.exc_info()
@@ -46,8 +41,7 @@ class ApiHandler:
 
     def upload_parsed_data(self, keyword, sites, definitions, examples):
         try:
-            phrasal_verb = replace_space_to_hyphen(keyword)
-            URL = f'{self.api_address}/{self.api_endpoints["phrasal_verb"]}/{phrasal_verb}'
+            URL = f'{self.api_address}/{self.api_endpoints["phrasal_verb"]}/{keyword}'
             data = {
                 "dictionaries": sites,
                 "definitions": definitions,
@@ -56,8 +50,7 @@ class ApiHandler:
             }
             token = self.get_token()
             if token:
-                headers = {"Authorization": token}
-                res = requests.put(URL, data=data, headers=headers)
+                res = requests.put(URL, data=data, headers={"Authorization": token})
                 return True
         except Exception as e:
             _, _, tb = sys.exc_info()
