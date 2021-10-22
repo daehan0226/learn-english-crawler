@@ -3,9 +3,10 @@ from libs.helper import *
 
 def test_remove_duplicates():
     list_with_duplicates = ["a", "b", "b"]
-    list_uinuqe = ["a", "b"]
+    list_unique = ["a", "b"]
 
-    assert sorted(remove_duplicates(list_with_duplicates)) == sorted(list_uinuqe)
+    assert sorted(remove_duplicates(list_with_duplicates)) == sorted(list_unique)
+    assert remove_duplicates("assf") == False
 
 
 def test_replace_space_to_hyphen():
@@ -19,8 +20,6 @@ def test_separate_by_space():
     string = "test helper"
     separated = ["test", "helper"]
 
-    empty_string = ""
-
     assert separate_by_space(string) == separated
-    assert separate_by_space(empty_string) == False
+    assert separate_by_space("") == False
     assert separate_by_space(None) == False

@@ -24,4 +24,6 @@ def trim_spaces(sentences):
 
 
 def remove_duplicates(sentences):
-    return list(set(sentences)) if sentences else sentences
+    if isinstance(sentences, list):
+        return list(set(sentences)) if sentences else sentences
+    return False
