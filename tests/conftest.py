@@ -1,5 +1,12 @@
+import simplejson
 import pytest
+from libs.ApiHandler import ApiHandler
 from libs.Crawler import Crawler
+from libs.logger import get_logger
+
+
+json_config = open("./config/config.json").read()
+config = simplejson.loads(json_config)
 
 
 @pytest.fixture
@@ -10,3 +17,9 @@ def crawler():
         {"url": "https://dictionary.cambridge.org/dictionary/english/"}
     )
     return crawler
+
+
+@pytest.fixture
+def apiHandler():
+    apiHandler = ApiHandler(get_logger(config["log_dir"]), config["api"])
+    return apiHandler
