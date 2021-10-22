@@ -5,7 +5,7 @@ from logging import (
 from datetime import datetime
 
 
-def get_logger(config):
+def get_logger(dir):
     log_file_max_bytes = 1024 * 1024 * 100
 
     logger = logging.getLogger("crawl_log")
@@ -13,7 +13,7 @@ def get_logger(config):
 
     today = datetime.today().strftime("%Y%m%d")
     file_handler = logging.handlers.RotatingFileHandler(
-        filename=f'{config["log_dir"]}{today}',
+        filename=f"{dir}{today}",
         maxBytes=log_file_max_bytes,
         encoding="utf-8",
     )
