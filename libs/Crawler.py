@@ -2,7 +2,7 @@ import simplejson
 import requests
 from bs4 import BeautifulSoup
 
-from libs.helper import separate_by_space
+from libs.helper import filter_sentences_if_not_include_keyword, separate_by_space
 from libs.logger import get_logger
 
 json_config = open("./config/config.json").read()
@@ -32,16 +32,6 @@ class Crawler:
 
     def set_keyword(self, keyword):
         self.keyword = keyword
-
-    def filter_if_not_include_keyword(self, sentences):
-        result = []
-        verb, particle = separate_by_space(self.keyword)
-
-        for sentence in sentences:
-            if verb in sentence or particle in sentence:
-                result.append(sentence)
-
-        return result
 
     def log_parsing_result(self, definition_count, example_count):
         self.logging.info(

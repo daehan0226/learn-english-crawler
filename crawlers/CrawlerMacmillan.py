@@ -18,7 +18,7 @@ class CrawlerMacmillan(Crawler):
             examples.extend(self.find_text_contents(self.doc, self.example_element))
 
             self.definitions = definitions
-            self.examples = self.filter_if_not_include_keyword(examples)
+            self.examples = examples
             self.log_parsing_result(len(self.definitions), len(self.examples))
 
         except Exception as e:

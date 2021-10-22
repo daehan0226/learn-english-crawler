@@ -23,7 +23,7 @@ class CrawlerMerriam(Crawler):
                 )
 
             self.definitions = definitions
-            self.examples = self.filter_if_not_include_keyword(examples)
+            self.examples = examples
             self.log_parsing_result(len(self.definitions), len(self.examples))
 
         except Exception as e:

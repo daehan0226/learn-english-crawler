@@ -5,6 +5,8 @@ from random import uniform
 from libs.ApiHandler import ApiHandler
 from libs.Crawler import Crawler
 from libs.helper import (
+    filter_sentences_if_not_include_keyword,
+    separate_by_space,
     trim_spaces,
     remove_duplicates,
 )
@@ -29,6 +31,7 @@ def run_crawler():
         sites = []
         definitions = []
         examples = []
+        _, particle = separate_by_space(keyword)
         for site, site_data in config["sites"].items():
             try:
                 if site == "cambridge":
@@ -59,8 +62,9 @@ def run_crawler():
                 time.sleep(uniform(1, 2))
                 sites.append(site)
                 definitions.extend(cralwer.definitions)
-                examples.extend(cralwer.examples)
-
+                examples.extend(
+                    filter_sentences_if_not_include_keyword(cralwer.examples, particle)
+                )
             except Exception as e:
                 _, _, tb = sys.exc_info()
                 logging.error(f"{tb.tb_lineno},  {e.__str__()}")

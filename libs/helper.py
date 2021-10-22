@@ -27,3 +27,7 @@ def remove_duplicates(sentences):
     if isinstance(sentences, list):
         return list(set(sentences)) if sentences else sentences
     return False
+
+
+def filter_sentences_if_not_include_keyword(sentences, keyword):
+    return [sentence for sentence in sentences if keyword in sentence]
