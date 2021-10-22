@@ -19,4 +19,8 @@ def test_separate_by_space():
     string = "test helper"
     separated = ["test", "helper"]
 
+    empty_string = ""
+
     assert separate_by_space(string) == separated
+    assert separate_by_space(empty_string) == False
+    assert separate_by_space(None) == False

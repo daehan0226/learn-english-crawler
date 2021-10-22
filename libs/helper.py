@@ -1,7 +1,10 @@
-# TODO - CHECK keyword logic(string, includes space, more than 2 words)
-# TODO - rename fucntion name(separate_by_space)
 def separate_by_space(keyword):
-    return keyword.split(" ", 1)
+    try:
+        if " " in keyword:
+            return keyword.split(" ", 1)
+        return False
+    except:
+        return False
 
 
 def replace_space_to_hyphen(string):
