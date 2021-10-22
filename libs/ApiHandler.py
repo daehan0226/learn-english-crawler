@@ -2,7 +2,7 @@ import sys
 import requests
 from datetime import datetime
 
-from libs.helper import get_verb_particle_from_keyword, replace_space_to_hyphen
+from libs.helper import replace_space_to_hyphen
 
 
 class ApiHandler:

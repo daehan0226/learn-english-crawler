@@ -1,6 +1,6 @@
 # TODO - CHECK keyword logic(string, includes space, more than 2 words)
 # TODO - rename fucntion name(separate_by_space)
-def get_verb_particle_from_keyword(keyword):
+def separate_by_space(keyword):
     return keyword.split(" ", 1)
 
 

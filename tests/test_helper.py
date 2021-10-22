@@ -19,4 +19,4 @@ def test_separate_by_space():
     string = "test helper"
     separated = ["test", "helper"]
 
-    assert get_verb_particle_from_keyword(string) == separated
+    assert separate_by_space(string) == separated
