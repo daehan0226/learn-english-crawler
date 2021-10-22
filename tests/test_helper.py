@@ -23,3 +23,10 @@ def test_separate_by_space():
     assert separate_by_space(string) == separated
     assert separate_by_space("") == False
     assert separate_by_space(None) == False
+
+
+def test_filter_sentences_if_not_include_keyword():
+    sentences = ["as df gh", "qw rt yu"]
+    keyword = "as"
+
+    assert filter_sentences_if_not_include_keyword(sentences, keyword) == ["as df gh"]
