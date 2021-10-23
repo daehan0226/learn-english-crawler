@@ -18,6 +18,12 @@ class Crawler:
         headers.update({"User-Agent": "My User Agent 1.0"})
         return headers
 
+    def set_keyword(self, keyword):
+        self.keyword = replace_space_to_hyphen(keyword)
+
+    def set_parse_url(self, site_data):
+        self.url = site_data["url"] + self.keyword
+
     def load(self):
         try:
             self.logging.debug("parsing started from this url : " + self.url)
@@ -27,11 +33,8 @@ class Crawler:
         except Exception as e:
             self.logging.error(f"get request error {e.__str__()}")
 
-    def set_parse_url(self, site_data):
-        self.url = site_data["url"] + self.keyword
-
-    def set_keyword(self, keyword):
-        self.keyword = replace_space_to_hyphen(keyword)
+    def parse(self):
+        pass
 
     def log_parsing_result(self, definition_count, example_count):
         self.logging.info(
