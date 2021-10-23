@@ -1,3 +1,15 @@
+def check_type(type_: str) -> bool:
+    return type_ in ["phrasal_verb", "idiom"]
+
+
+def get_keyword_key(type_: str) -> str or bool:
+    if type_ == "phrasal_verb":
+        return type_
+    elif type_ == "idiom":
+        return "expression"
+    return None
+
+
 def separate_by_space(keyword):
     try:
         if " " in keyword:

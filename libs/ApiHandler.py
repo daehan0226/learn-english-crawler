@@ -13,8 +13,7 @@ class ApiHandler:
 
     def get_keywords(self, type_):
         try:
-            if type_ == "phrasal_verb":
-                URL = f'{self.api_address}/{self.api_endpoints["keywords"]}'
+            URL = f'{self.api_address}/{self.api_endpoints["keyword"][type_]}'
             res = requests.get(URL)
             result = res.json()["result"]
             self.logging.info(f"{len(result)} to crawl ")
@@ -39,9 +38,9 @@ class ApiHandler:
             self.logging.error(f"API get_token ERROR {tb.tb_lineno},  {e.__str__()}")
             return False
 
-    def upload_parsed_data(self, keyword, sites, definitions, examples):
+    def upload_parsed_data(self, type_, keyword, sites, definitions, examples):
         try:
-            URL = f'{self.api_address}/{self.api_endpoints["phrasal_verb"]}/{keyword}'
+            URL = f'{self.api_address}/{self.api_endpoints[type_]}/{keyword}'
             data = {
                 "dictionaries": sites,
                 "definitions": definitions,
