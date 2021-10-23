@@ -21,7 +21,7 @@ class ApiHandler:
         except Exception as e:
             _, _, tb = sys.exc_info()
             self.logging.error(f"API get_keywords ERROR {tb.tb_lineno},  {e.__str__()}")
-            return []
+            return None
 
     def get_token(self):
         try:
@@ -36,11 +36,11 @@ class ApiHandler:
         except Exception as e:
             _, _, tb = sys.exc_info()
             self.logging.error(f"API get_token ERROR {tb.tb_lineno},  {e.__str__()}")
-            return False
+            return None
 
     def upload_parsed_data(self, type_, keyword, sites, definitions, examples):
         try:
-            URL = f'{self.api_address}/{self.api_endpoints[type_]}/{keyword}'
+            URL = f"{self.api_address}/{self.api_endpoints[type_]}/{keyword}"
             data = {
                 "dictionaries": sites,
                 "definitions": definitions,
@@ -56,4 +56,4 @@ class ApiHandler:
             self.logging.error(
                 f"API upload_parsed_data ERROR {tb.tb_lineno},  {e.__str__()}"
             )
-            return False
+            return None

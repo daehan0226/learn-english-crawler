@@ -1,32 +1,33 @@
 from libs.helper import *
 
 
-def test_remove_duplicates():
-    list_with_duplicates = ["a", "b", "b"]
-    list_unique = ["a", "b"]
+def test_check_type():
+    assert check_type("phrasal_verb")
+    assert check_type("idiom")
+    assert check_type("temp") == False
 
-    assert sorted(remove_duplicates(list_with_duplicates)) == sorted(list_unique)
+
+def test_get_keyword_key():
+    assert get_keyword_key("phrasal_verb") == "phrasal_verb"
+    assert get_keyword_key("idiom") == "expression"
+
+
+def test_remove_duplicates():
+    assert sorted(remove_duplicates(["a", "b", "b"])) == sorted(["a", "b"])
     assert remove_duplicates("assf") == False
 
 
 def test_replace_space_to_hyphen():
-    string_with_space = "test helper"
-    string_with_hyphen = "test-helper"
-
-    assert replace_space_to_hyphen(string_with_space) == string_with_hyphen
+    assert replace_space_to_hyphen("test helper") == "test-helper"
 
 
 def test_separate_by_space():
-    string = "test helper"
-    separated = ["test", "helper"]
-
-    assert separate_by_space(string) == separated
+    assert separate_by_space("test helper") == ["test", "helper"]
     assert separate_by_space("") == False
     assert separate_by_space(None) == False
 
 
 def test_filter_sentences_if_not_include_keyword():
-    sentences = ["as df gh", "qw rt yu"]
-    keyword = "as"
-
-    assert filter_sentences_if_not_include_keyword(sentences, keyword) == ["as df gh"]
+    assert filter_sentences_if_not_include_keyword(["as df gh", "qw rt yu"], "as") == [
+        "as df gh"
+    ]
