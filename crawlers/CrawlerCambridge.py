@@ -15,14 +15,12 @@ class CrawlerCambridge(Crawler):
             definitions = []
             examples = []
             for dict_card in dictionary_cards:
-                category = dict_card.find("div", class_="pos-header").text
-                if "phrasal verb" in category:
-                    definitions.extend(
-                        self.find_text_contents(dict_card, self.definition_element)
-                    )
-                    examples.extend(
-                        self.find_text_contents(dict_card, self.example_element)
-                    )
+                definitions.extend(
+                    self.find_text_contents(dict_card, self.definition_element)
+                )
+                examples.extend(
+                    self.find_text_contents(dict_card, self.example_element)
+                )
 
             self.definitions = definitions
             self.examples = examples
