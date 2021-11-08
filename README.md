@@ -15,4 +15,4 @@
 
 
 
-[서버레포](https://github.com/daehan0226/learn-english-server)
+[서버레포]:(https://github.com/daehan0226/learn-english-server)
