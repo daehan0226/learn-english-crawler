@@ -1,12 +1,6 @@
 from libs.helper import *
 
 
-def test_check_type():
-    assert check_type("phrasal_verb")
-    assert check_type("idiom")
-    assert check_type("temp") == False
-
-
 def test_get_keyword_key():
     assert get_keyword_key("phrasal_verb") == "phrasal_verb"
     assert get_keyword_key("idiom") == "expression"

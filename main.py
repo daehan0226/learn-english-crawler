@@ -4,7 +4,7 @@ import simplejson
 from random import uniform
 from libs.ApiHandler import ApiHandler
 from libs.Crawler import Crawler
-from libs.helper import trim_spaces, remove_duplicates, get_keyword_key, check_type
+from libs.helper import has_valid_args, get_keyword_key, trim_spaces, remove_duplicates
 
 from crawlers.CrawlerCambridge import CrawlerCambridge
 from crawlers.CrawlerMerriam import CrawlerMerriam
@@ -17,11 +17,12 @@ json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
-def run_crawler(type_: str):
+def run_crawler(type_: str, env: str):
     crawler = Crawler()
     logging = crawler.logging
     logging.info("================Crawler started==============")
-    api = ApiHandler(logging, config["api"])
+    api = ApiHandler(logging, config["api"], env)
+
     for data in api.get_keywords(type_):
         try:
             keyword = data[get_keyword_key(type_)]
@@ -62,6 +63,7 @@ def run_crawler(type_: str):
                 except Exception as e:
                     _, _, tb = sys.exc_info()
                     logging.error(f"{tb.tb_lineno},  {e.__str__()}")
+
             api.upload_parsed_data(
                 type_,
                 keyword,
@@ -77,5 +79,5 @@ def run_crawler(type_: str):
 
 
 if __name__ == "__main__":
-    if check_type(sys.argv[1]):
-        run_crawler(sys.argv[1])
+    if has_valid_args(sys.argv):
+        run_crawler(sys.argv[1], sys.argv[2])

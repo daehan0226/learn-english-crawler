@@ -4,14 +4,21 @@ from datetime import datetime
 
 
 class ApiHandler:
-    def __init__(self, logging, config):
+    def __init__(self, logging, config, env):
         self.logging = logging
         self.api_address = config["address"]
         self.api_endpoints = config["endpoints"]
         self.username = config["username"]
         self.password = config["password"]
+        self.env = env
 
     def get_keywords(self, type_):
+        if self.env == "dev":
+            keywords = {
+                "phrasal_verb": [{"phrasal_verb": "put down"}],
+                "idiom": [{"expression": "hit the nail"}],
+            }
+            return keywords[type_]
         try:
             URL = f'{self.api_address}/{self.api_endpoints["keyword"][type_]}'
             res = requests.get(URL)
@@ -39,6 +46,9 @@ class ApiHandler:
             return None
 
     def upload_parsed_data(self, type_, keyword, sites, definitions, examples):
+        if self.env == "dev":
+            print(type_, keyword, sites, len(definitions), len(examples))
+            return True
         try:
             URL = f"{self.api_address}/{self.api_endpoints[type_]}/{keyword}"
             data = {
