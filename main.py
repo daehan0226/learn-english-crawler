@@ -3,22 +3,16 @@ import time
 import simplejson
 from random import uniform
 from libs.ApiHandler import ApiHandler
-from libs.Crawler import Crawler
 from libs.helper import has_valid_args, get_keyword_key, trim_spaces, remove_duplicates
 
-from crawlers.CrawlerCambridge import CrawlerCambridge
-from crawlers.CrawlerMerriam import CrawlerMerriam
-from crawlers.CrawlerOxford import CrawlerOxford
-from crawlers.CrawlerMacmillan import CrawlerMacmillan
-from crawlers.CrawlerCollins import CrawlerCollins
-
+from crawlers.CrawlerPhrasalVerb import CrawlerPhrasalVerb
 
 json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
 def run_crawler(type_: str, env: str):
-    crawler = Crawler()
+    crawler = CrawlerPhrasalVerb() if type_ == "phrasal_verb" else None
     logging = crawler.logging
     logging.info("================Crawler started==============")
     api = ApiHandler(logging, config["api"], env)
@@ -31,20 +25,7 @@ def run_crawler(type_: str, env: str):
             examples = []
             for site, site_data in config["sites"].items():
                 try:
-                    if site == "cambridge":
-                        crawler = CrawlerCambridge()
-
-                    elif site == "merriam":
-                        crawler = CrawlerMerriam()
-
-                    elif site == "oxford":
-                        crawler = CrawlerOxford()
-
-                    elif site == "macmillan":
-                        crawler = CrawlerMacmillan()
-
-                    elif site == "collins":
-                        crawler = CrawlerCollins()
+                    crawler.set_site_elements(site)
 
                     logging.info(f"parsing for {keyword} started from {site}")
                     start_time = time.time()
