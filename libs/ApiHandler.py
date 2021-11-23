@@ -15,8 +15,8 @@ class ApiHandler:
     def get_keywords(self, type_):
         if self.env == "dev":
             keywords = {
-                "phrasal_verb": [{"phrasal_verb": "put down"}],
-                "idiom": [{"expression": "hit the nail"}],
+                "phrasal_verb": [{"phrasal_verb": "put up with"}],
+                "idiom": [{"expression": "pop the question"}],
             }
             return keywords[type_]
         try:

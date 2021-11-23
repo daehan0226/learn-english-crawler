@@ -2,16 +2,61 @@ import sys
 from libs.Crawler import Crawler
 
 
-class CrawlerPhrasalVerb(Crawler):
+class CrawlerIdiom(Crawler):
     def __init__(self):
         self.definitions = []
         self.examples = []
 
+    def _extract_dictionary_url(self, string):
+        return string.replace("/url?q=", "").split("&")[0]
+
+    def _filter_dictionary_urls(self, sites, links):
+        result = []
+        for link in links:
+            if any(ele in link["href"] for ele in sites.keys()):
+                result.append(self._extract_dictionary_url(link["href"]))
+        return result
+
+    def _set_url_if_includes_all_eles_in_keyword(self, sites, links):
+        reuslt = []
+        for link in links:
+            keyword_in_link = link.split("/")[-1]
+            for site, site_data in sites.items():
+                if site in link and all(
+                    ele in keyword_in_link for ele in self.keyword.split("-")
+                ):
+                    reuslt.append(
+                        {"site": site, "url": f"{site_data['url']}{keyword_in_link}"}
+                    )
+        return reuslt
+
+    def _remove_duplicates_site_url(self, site_urls):
+        sites = []
+        result = []
+        for site_data in site_urls:
+            if site_data["site"] in sites:
+                pass
+            else:
+                sites.append(site_data["site"])
+                result.append(site_data)
+        return result
+
+    def _get_candidate_urls(self, candidate_count=50):
+        url_crawler = Crawler()
+        url_crawler.url = f"https://www.google.com/search?q=idiom {self.keyword} dictionary meaning&num={candidate_count}"
+        url_crawler.load()
+        return url_crawler.doc.find_all("a")
+
+    def _get_urls(self, sites):
+        candidate_urls = self._get_candidate_urls()
+        dictionary_urls = self._filter_dictionary_urls(sites, candidate_urls)
+        urls_with_keyword = self._set_url_if_includes_all_eles_in_keyword(
+            sites, dictionary_urls
+        )
+        return self._remove_duplicates_site_url(urls_with_keyword)
+
     def get_urls(self, sites):
-        urls = []
-        for site, site_data in sites.items():
-            urls.append({"site": site, "url": f"{site_data['url']}{self.keyword}"})
-        return urls
+        return self._get_urls(sites)
 
     def parse(self):
         try:

@@ -3,16 +3,23 @@ import time
 import simplejson
 from random import uniform
 from libs.ApiHandler import ApiHandler
-from libs.helper import has_valid_args, get_keyword_key, trim_spaces, remove_duplicates
+from libs.helper import (
+    has_valid_args,
+    get_keyword_key,
+    replace_space_to_hyphen,
+    trim_spaces,
+    remove_duplicates,
+)
 
 from crawlers.CrawlerPhrasalVerb import CrawlerPhrasalVerb
+from crawlers.CrawlerIdiom import CrawlerIdiom
 
 json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
 def run_crawler(type_: str, env: str):
-    crawler = CrawlerPhrasalVerb() if type_ == "phrasal_verb" else None
+    crawler = CrawlerPhrasalVerb() if type_ == "phrasal_verb" else CrawlerIdiom()
     logging = crawler.logging
     logging.info("================Crawler started==============")
     api = ApiHandler(logging, config["api"], env)
@@ -23,22 +30,26 @@ def run_crawler(type_: str, env: str):
             sites = []
             definitions = []
             examples = []
-            for site, site_data in config["sites"].items():
-                try:
-                    crawler.set_site_elements(site)
 
-                    logging.info(f"parsing for {keyword} started from {site}")
+            crawler.keyword = replace_space_to_hyphen(keyword)
+            dict_urls = crawler.get_urls(config["sites"])
+
+            for dict_url in dict_urls:
+                try:
+                    crawler.set_site_elements(dict_url["site"])
+                    logging.info(
+                        f"parsing for {keyword} started from {dict_url['site']}"
+                    )
                     start_time = time.time()
-                    crawler.set_keyword(keyword)
-                    crawler.set_parse_url(site_data)
+                    crawler.url = dict_url["url"]
                     crawler.load()
                     crawler.parse()
                     end_time = time.time()
                     logging.debug(
-                        f"site : {site} parsing finished, parsing time : {end_time - start_time}"
+                        f"site : {dict_url['site']} parsing finished, parsing time : {end_time - start_time}"
                     )
                     time.sleep(uniform(1, 2))
-                    sites.append(site)
+                    sites.append(dict_url["site"])
                     definitions.extend(crawler.definitions)
                     examples.extend(crawler.examples)
                 except Exception as e:

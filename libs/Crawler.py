@@ -13,16 +13,41 @@ class Crawler:
     logging = get_logger(config["log_dir"])
     doc = None
 
+    def __init__(
+        self,
+    ):
+        self._url = ""
+        self._keyword = ""
+
     def set_header(self):
         headers = requests.utils.default_headers()
         headers.update({"User-Agent": "My User Agent 1.0"})
         return headers
 
-    def set_keyword(self, keyword):
-        self.keyword = replace_space_to_hyphen(keyword)
+    @property
+    def keyword(self):
+        return self._keyword
 
-    def set_parse_url(self, site_data):
-        self.url = site_data["url"] + self.keyword
+    @keyword.setter
+    def keyword(self, val):
+        try:
+            self._keyword = val
+        except:
+            raise ValueError("The input you have provided is not string")
+
+    def set_urls(self):
+        pass
+
+    @property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, val):
+        try:
+            self._url = val
+        except:
+            raise ValueError("The input you have provided is not valid url form")
 
     def load(self):
         try:
