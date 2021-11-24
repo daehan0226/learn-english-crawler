@@ -1,7 +1,7 @@
 def get_keyword_key(type_: str) -> str or bool:
-    if type_ == "phrasal_verb":
+    if type_ == "phrasal_verbs":
         return type_
-    elif type_ == "idiom":
+    elif type_ == "idioms":
         return "expression"
     return None
 
@@ -42,8 +42,8 @@ def filter_sentences_if_not_include_keyword(sentences, keyword):
 
 
 def has_valid_args(args):
-    types = ["phrasal_verb", "idiom"]
-    envs = ["sever", "dev"]
+    types = ["phrasal_verbs", "idioms"]
+    envs = ["server", "dev"]
     help_message = f"""
         Please enter
         `python ./main.py type env`

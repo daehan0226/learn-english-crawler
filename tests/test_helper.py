@@ -2,8 +2,8 @@ from libs.helper import *
 
 
 def test_get_keyword_key():
-    assert get_keyword_key("phrasal_verb") == "phrasal_verb"
-    assert get_keyword_key("idiom") == "expression"
+    assert get_keyword_key("phrasal_verbs") == "phrasal_verb"
+    assert get_keyword_key("idioms") == "expression"
 
 
 def test_remove_duplicates():

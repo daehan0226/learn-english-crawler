@@ -55,10 +55,9 @@ def run_crawler(type_: str, env: str):
                 except Exception as e:
                     _, _, tb = sys.exc_info()
                     logging.error(f"{tb.tb_lineno},  {e.__str__()}")
-
             api.upload_parsed_data(
                 type_,
-                keyword,
+                crawler.keyword,
                 sites,
                 trim_spaces(remove_duplicates(definitions)),
                 trim_spaces(remove_duplicates(examples)),

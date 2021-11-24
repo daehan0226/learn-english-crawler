@@ -15,8 +15,8 @@ class ApiHandler:
     def get_keywords(self, type_):
         if self.env == "dev":
             keywords = {
-                "phrasal_verb": [{"phrasal_verb": "put up with"}],
-                "idiom": [{"expression": "pop the question"}],
+                "phrasal_verbs": [{"phrasal_verb": "put up with"}],
+                "idioms": [{"expression": "pop the question"}],
             }
             return keywords[type_]
         try:
@@ -50,6 +50,7 @@ class ApiHandler:
             print(type_, keyword, sites, len(definitions), len(examples))
             return True
         try:
+            print(type_, keyword, sites, len(definitions), len(examples))
             URL = f"{self.api_address}/{self.api_endpoints[type_]}/{keyword}"
             data = {
                 "dictionaries": sites,
@@ -57,6 +58,7 @@ class ApiHandler:
                 "examples": examples,
                 "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
             }
+            print(data)
             token = self.get_token()
             if token:
                 res = requests.put(URL, data=data, headers={"Authorization": token})
