@@ -47,7 +47,6 @@ class ApiHandler:
 
     def upload_parsed_data(self, type_, keyword, sites, definitions, examples):
         if self.env == "dev":
-            print(type_, keyword, sites, len(definitions), len(examples))
             return True
         try:
             print(type_, keyword, sites, len(definitions), len(examples))
@@ -58,7 +57,6 @@ class ApiHandler:
                 "examples": examples,
                 "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
             }
-            print(data)
             token = self.get_token()
             if token:
                 res = requests.put(URL, data=data, headers={"Authorization": token})

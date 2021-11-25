@@ -57,7 +57,7 @@ def run_crawler(type_: str, env: str):
                     logging.error(f"{tb.tb_lineno},  {e.__str__()}")
             api.upload_parsed_data(
                 type_,
-                crawler.keyword,
+                keyword,
                 sites,
                 trim_spaces(remove_duplicates(definitions)),
                 trim_spaces(remove_duplicates(examples)),
