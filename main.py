@@ -31,6 +31,7 @@ def run_crawler(logging, env=None, keyword=None, keyword_type=None):
         CrawlerMerriam,
         CrawlerOxford,
     ]
+
     try:
         keywords = (
             ApiHandler.get_keywords(env, keyword_type)

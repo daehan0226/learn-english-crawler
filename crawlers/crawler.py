@@ -67,9 +67,9 @@ class Crawler:
             self._definitions.extend(
                 self.find_text_contents(dict_card, self._definition_element)
             )
-            self._logging.info(
-                f"parsed from {self._site}, count : definition {len(self._definitions)}, example {len(self._examples)}"
-            )
+        self._logging.info(
+            f"parsed from {self._site}, count : definition {len(self._definitions)}, example {len(self._examples)}"
+        )
 
     def find_text_contents(self, src, selector):
         result = []

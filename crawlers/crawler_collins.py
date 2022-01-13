@@ -10,5 +10,4 @@ class CrawlerCollins(Crawler):
     _example_element = ["span", "quote"]
 
     def __init__(self, logging):
-        self._logging = logging
         Crawler.__init__(self, logging)
