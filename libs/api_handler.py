@@ -2,6 +2,8 @@ import sys
 import requests
 from datetime import datetime
 
+from libs.errors import WrongRunCommandError
+
 
 class ApiHandler:
     def __init__(self, logging, config, env):
@@ -13,22 +15,29 @@ class ApiHandler:
         self.env = env
 
     def get_keywords(self, type_):
-        if self.env == "dev":
+        if self.env == "server":
+            try:
+                URL = f'{self.api_address}/{self.api_endpoints["keyword"][type_]}'
+                res = requests.get(URL)
+                result = res.json()["result"]
+                self.logging.info(f"{len(result)} to crawl ")
+                return result
+            except Exception as e:
+                _, _, tb = sys.exc_info()
+                self.logging.error(
+                    f"API get_keywords ERROR {tb.tb_lineno},  {e.__str__()}"
+                )
+                return None
+
+        elif self.env == "dev":
             keywords = {
                 "phrasal_verbs": [{"phrasal_verb": "put up with"}],
                 "idioms": [{"expression": "pop the question"}],
             }
             return keywords[type_]
-        try:
-            URL = f'{self.api_address}/{self.api_endpoints["keyword"][type_]}'
-            res = requests.get(URL)
-            result = res.json()["result"]
-            self.logging.info(f"{len(result)} to crawl ")
-            return result
-        except Exception as e:
-            _, _, tb = sys.exc_info()
-            self.logging.error(f"API get_keywords ERROR {tb.tb_lineno},  {e.__str__()}")
-            return None
+
+        else:
+            raise WrongRunCommandError("env")
 
     def get_token(self):
         try:

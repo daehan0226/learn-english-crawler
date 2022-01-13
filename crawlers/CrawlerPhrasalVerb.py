@@ -1,5 +1,5 @@
 import sys
-from libs.Crawler import Crawler
+from libs.crawler import Crawler
 
 
 class CrawlerPhrasalVerb(Crawler):

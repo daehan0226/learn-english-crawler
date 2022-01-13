@@ -1,6 +1,6 @@
 def get_keyword_key(type_: str) -> str or bool:
     if type_ == "phrasal_verbs":
-        return type_
+        return "phrasal_verb"
     elif type_ == "idioms":
         return "expression"
     return None
@@ -39,21 +39,3 @@ def remove_duplicates(sentences):
 
 def filter_sentences_if_not_include_keyword(sentences, keyword):
     return [sentence for sentence in sentences if keyword in sentence]
-
-
-def has_valid_args(args):
-    types = ["phrasal_verbs", "idioms"]
-    envs = ["server", "dev"]
-    help_message = f"""
-        Please enter
-        `python ./main.py type env`
-        type must be one of {", ".join(types)}
-        env must be one of {", ".join(envs)}
-    """
-    try:
-        if args[1] in types and args[2] in envs:
-            return True
-        else:
-            raise Exception
-    except:
-        print(help_message)

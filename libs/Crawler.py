@@ -10,7 +10,6 @@ config = simplejson.loads(json_config)
 
 
 class Crawler:
-    logging = get_logger(config["log_dir"])
     doc = None
 
     def __init__(

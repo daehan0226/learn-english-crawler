@@ -1,7 +1,7 @@
 import simplejson
 import pytest
-from libs.ApiHandler import ApiHandler
-from libs.Crawler import Crawler
+from libs.api_handler import ApiHandler
+from libs.crawler import Crawler
 from libs.logger import get_logger
 
 
