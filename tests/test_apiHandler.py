@@ -1,12 +1,11 @@
-def test_get_keywords(apiHandler):
-    phrasal_verb_keywords = apiHandler.get_keywords("phrasal_verb")
-    # idiom_keywords = apiHandler.get_keywords("idiom")
+from libs.api_handler import ApiHandler
 
-    assert isinstance(phrasal_verb_keywords, list)
+
+def test_get_keywords():
+
+    phrasal_verbs_keywords = ApiHandler.get_keywords("dev", "phrasal_verbs")
+    idioms_keywords = ApiHandler.get_keywords("dev", "idioms")
+
+    assert phrasal_verbs_keywords == ["put up with"]
+    assert idioms_keywords == ["pop the question"]
     # assert isinstance(idiom_keywords, list)
-
-
-def test_get_token(apiHandler):
-    token = apiHandler.get_token()
-
-    assert isinstance(token, str)
