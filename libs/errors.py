@@ -9,10 +9,9 @@ class NoKeywordArgsError(Exception):
 
 
 class WrongRunCommandError(Exception):
-    def __init__(self, key):
+    def __init__(self):
         keyword_type_list = ["phrasal_verbs", "idioms"]
         env_list = ["server", "dev"]
-        self.key = key
         self.message = f"""
             kwargs=
                 keywords must not include space, replace space with hyphen if they include space

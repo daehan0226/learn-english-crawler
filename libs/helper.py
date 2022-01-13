@@ -1,9 +1,12 @@
-def get_keyword_key(type_: str) -> str or bool:
-    if type_ == "phrasal_verbs":
-        return "phrasal_verb"
-    elif type_ == "idioms":
-        return "expression"
-    return None
+from libs.errors import WrongRunCommandError
+
+
+def check_run_cmd(env, keyword_type):
+    if keyword_type not in ["phrasal_verbs", "idioms"]:
+        raise WrongRunCommandError
+
+    if env not in ["server", "dev"]:
+        raise WrongRunCommandError
 
 
 def separate_by_space(keyword):

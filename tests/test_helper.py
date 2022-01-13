@@ -1,11 +1,6 @@
 from libs.helper import *
 
 
-def test_get_keyword_key():
-    assert get_keyword_key("phrasal_verbs") == "phrasal_verb"
-    assert get_keyword_key("idioms") == "expression"
-
-
 def test_remove_duplicates():
     assert sorted(remove_duplicates(["a", "b", "b"])) == sorted(["a", "b"])
     assert remove_duplicates("assf") == False
