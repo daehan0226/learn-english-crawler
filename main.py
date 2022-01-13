@@ -45,14 +45,14 @@ def run_crawler(logging, env=None, keyword=None, keyword_type=None):
         for SiteCrawler in SiteCrawlers:
             crawler = SiteCrawler(logging)
             crawler.keyword = keyword
-            logging.debug(f"site: {crawler.get_site()}, keyword : {crawler.keyword}")
+            logging.debug(f"site: {crawler.site}, keyword : {crawler.keyword}")
             crawler.set_parse_url()
-            logging.debug(f"Loading {crawler.get_parse_url()} for {keyword}")
+            logging.debug(f"Loading {crawler.parse_url} for {keyword}")
             crawler.load()
             crawler.parse()
 
-            definitions.extend(crawler.get_definitions())
-            examples.extend(crawler.get_examples())
+            definitions.extend(crawler.definitions)
+            examples.extend(crawler.examples)
 
     logging.info("==Crawler finished==============")
 

@@ -16,18 +16,21 @@ class Crawler:
         self._definitions = []
         self._examples = []
 
-    def set_header(self):
+    def _set_header(self):
         headers = requests.utils.default_headers()
         headers.update({"User-Agent": "My User Agent 1.0"})
         return headers
 
-    def get_definitions(self):
+    @property
+    def definitions(self):
         return self._definitions
 
-    def get_examples(self):
+    @property
+    def examples(self):
         return self._examples
 
-    def get_site(self):
+    @property
+    def site(self):
         return self._site
 
     @property
@@ -41,18 +44,19 @@ class Crawler:
         except:
             raise ValueError(f"Please check the given keyword : {val}")
 
+    @property
+    def parse_url(self):
+        return self._parse_url
+
     def set_parse_url(self):
         if not self._keyword:
             raise ValueError("Please set keyword first")
         self._parse_url = f"{self._url}{self._keyword}"
 
-    def get_parse_url(self):
-        return self._parse_url
-
     def load(self):
         try:
             self._logging.debug("parsing started from this url : " + self._parse_url)
-            r = requests.get(self._parse_url, headers=self.set_header())
+            r = requests.get(self._parse_url, headers=self._set_header())
             self.doc = BeautifulSoup(r.text, "lxml")
         except Exception as e:
             self._logging.error(f"get request error {e.__str__()}")
