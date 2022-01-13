@@ -10,4 +10,4 @@ class CrawlerOxford(Crawler):
     _example_element = ["ul", "examples"]
 
     def __init__(self, logging):
-        Crawler.__init__(self, logging)
+        super().__init__(logging)

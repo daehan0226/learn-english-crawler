@@ -10,4 +10,4 @@ class CrawlerMerriam(Crawler):
     _example_element = ["span", ["ex-sent", "t"]]
 
     def __init__(self, logging):
-        Crawler.__init__(self, logging)
+        super().__init__(logging)

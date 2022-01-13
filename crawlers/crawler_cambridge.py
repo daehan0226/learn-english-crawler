@@ -10,4 +10,4 @@ class CrawlerCambridge(Crawler):
     _example_element = ["span", "eg"]
 
     def __init__(self, logging):
-        Crawler.__init__(self, logging)
+        super().__init__(logging)

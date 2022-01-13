@@ -10,4 +10,4 @@ class CrawlerMacmillan(Crawler):
     _example_element = ["p", "EXAMPLE"]
 
     def __init__(self, logging):
-        Crawler.__init__(self, logging)
+        super().__init__(logging)

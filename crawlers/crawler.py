@@ -41,7 +41,7 @@ class Crawler:
         except:
             raise ValueError(f"Please check the given keyword : {val}")
 
-    def set_url(self):
+    def set_parse_url(self):
         if not self._keyword:
             raise ValueError("Please set keyword first")
         self._parse_url = f"{self._url}{self._keyword}"
@@ -54,7 +54,6 @@ class Crawler:
             self._logging.debug("parsing started from this url : " + self._parse_url)
             r = requests.get(self._parse_url, headers=self.set_header())
             self.doc = BeautifulSoup(r.text, "lxml")
-
         except Exception as e:
             self._logging.error(f"get request error {e.__str__()}")
 
