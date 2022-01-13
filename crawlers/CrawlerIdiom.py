@@ -1,9 +1,12 @@
 import sys
-from libs.crawler import Crawler
+from crawlers.crawler import Crawler
 
 
 class CrawlerIdiom(Crawler):
-    def __init__(self):
+    def __init__(self, logging):
+        self._url = ""
+        self._keyword = ""
+        self._logging = logging
         self.definitions = []
         self.examples = []
 
@@ -83,7 +86,7 @@ class CrawlerIdiom(Crawler):
 
         except Exception as e:
             _, _, tb = sys.exc_info()
-            self.logging.error(f"parse except,  {tb.tb_lineno},  {e.__str__()}")
+            self._logging.error(f"parse except,  {tb.tb_lineno},  {e.__str__()}")
 
     def set_site_elements(self, site):
         sites_elements = {
