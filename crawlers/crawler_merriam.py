@@ -11,3 +11,7 @@ class CrawlerMerriam(Crawler):
 
     def __init__(self, logging):
         super().__init__(logging)
+
+    def print_data(self):
+        print(f"site: {type(self)._site}")
+        super().print_data()

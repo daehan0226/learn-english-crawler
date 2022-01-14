@@ -54,6 +54,8 @@ def run_crawler(logging, env=None, keyword=None, keyword_type=None):
             definitions.extend(crawler.definitions)
             examples.extend(crawler.examples)
 
+            if env == "dev":
+                crawler.print_data()
     logging.info("==Crawler finished==============")
 
     # Upload

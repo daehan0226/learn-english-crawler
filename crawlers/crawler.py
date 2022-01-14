@@ -21,6 +21,16 @@ class Crawler:
         headers.update({"User-Agent": "My User Agent 1.0"})
         return headers
 
+    def print_data(self):
+        print(
+            f"""
+            url: {self._parse_url}
+            keyword: {self._keyword}
+            definitions: {len(self._definitions)}
+            examples: {len(self._examples)}
+        """
+        )
+
     @property
     def definitions(self):
         return self._definitions
@@ -31,7 +41,7 @@ class Crawler:
 
     @property
     def site(self):
-        return self._site
+        return type(self)._site
 
     @property
     def keyword(self):
@@ -51,27 +61,27 @@ class Crawler:
     def set_parse_url(self):
         if not self._keyword:
             raise ValueError("Please set keyword first")
-        self._parse_url = f"{self._url}{self._keyword}"
+        self._parse_url = f"{type(self)._url}{self._keyword}"
 
     def load(self):
         try:
             self._logging.debug("parsing started from this url : " + self._parse_url)
             r = requests.get(self._parse_url, headers=self._set_header())
-            self.doc = BeautifulSoup(r.text, "lxml")
+            self._doc = BeautifulSoup(r.text, "lxml")
         except Exception as e:
             self._logging.error(f"get request error {e.__str__()}")
 
     def parse(self):
-        dictionary_cards = self.find_elements(self._dictionary_cards)
+        dictionary_cards = self.find_elements(type(self)._dictionary_cards)
         for dict_card in dictionary_cards:
             self._examples.extend(
-                self.find_text_contents(dict_card, self._example_element)
+                self.find_text_contents(dict_card, type(self)._example_element)
             )
             self._definitions.extend(
-                self.find_text_contents(dict_card, self._definition_element)
+                self.find_text_contents(dict_card, type(self)._definition_element)
             )
         self._logging.info(
-            f"parsed from {self._site}, count : definition {len(self._definitions)}, example {len(self._examples)}"
+            f"parsed from {type(self)._site}, count : definition {len(self._definitions)}, example {len(self._examples)}"
         )
 
     def find_text_contents(self, src, selector):
@@ -87,5 +97,5 @@ class Crawler:
         result = []
         for selector in selectors:
             tag, class_ = selector
-            result.extend(self.doc.find_all(tag, class_=class_))
+            result.extend(self._doc.find_all(tag, class_=class_))
         return result

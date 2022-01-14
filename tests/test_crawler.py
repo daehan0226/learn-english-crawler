@@ -23,4 +23,4 @@ def test_load(crawler):
     crawler.set_parse_url()
     crawler.load()
 
-    assert "html" in crawler.doc
+    assert "html" in crawler._doc
