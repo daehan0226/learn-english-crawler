@@ -1,6 +1,8 @@
 import simplejson
 import requests
 from bs4 import BeautifulSoup
+import asyncio
+import aiohttp
 
 from libs.helper import replace_space_to_hyphen
 
@@ -63,11 +65,14 @@ class Crawler:
             raise ValueError("Please set keyword first")
         self._parse_url = f"{type(self)._url}{self._keyword}"
 
-    def load(self):
+    async def load(self, session):
         try:
             self._logging.debug("parsing started from this url : " + self._parse_url)
-            r = requests.get(self._parse_url, headers=self._set_header())
-            self._doc = BeautifulSoup(r.text, "lxml")
+            async with session.get(
+                self._parse_url, headers=self._set_header()
+            ) as response:
+                text = await response.read()
+                self._doc = BeautifulSoup(text, "lxml")
         except Exception as e:
             self._logging.error(f"get request error {e.__str__()}")
 

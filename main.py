@@ -1,5 +1,7 @@
 import sys
 import simplejson
+import asyncio
+import aiohttp
 
 
 from libs.api_handler import ApiHandler
@@ -21,6 +23,20 @@ json_config = open("./config/config.json").read()
 config = simplejson.loads(json_config)
 
 
+async def async_load_site(session, crawl):
+    await crawl.load(session)
+
+
+async def load_all_sites(crawlers):
+    async with aiohttp.ClientSession() as session:
+        load_list = []
+        for crawl in crawlers:
+            load = asyncio.ensure_future(async_load_site(session, crawl))
+            load_list.append(load)
+
+        await asyncio.gather(*load_list, return_exceptions=True)
+
+
 def run_crawler(logging, env=None, keyword=None, keyword_type=None):
     check_run_cmd(env, keyword_type)
 
@@ -30,7 +46,7 @@ def run_crawler(logging, env=None, keyword=None, keyword_type=None):
         else keyword.split(",")
     )
 
-    SiteCrawlers = [
+    crawler_objects = [
         CrawlerCambridge,
         CrawlerCollins,
         CrawlerMacmillan,
@@ -38,25 +54,32 @@ def run_crawler(logging, env=None, keyword=None, keyword_type=None):
         CrawlerOxford,
     ]
 
+    logging.info("=== Setting Crawlers==============")
+    crawlers = []
     for keyword in keywords:
         definitions = []
         examples = []
 
-        for SiteCrawler in SiteCrawlers:
-            crawler = SiteCrawler(logging)
+        for crawler_object in crawler_objects:
+            crawler = crawler_object(logging)
             crawler.keyword = keyword
+            crawler.keyword_type = keyword_type
             logging.debug(f"site: {crawler.site}, keyword : {crawler.keyword}")
             crawler.set_parse_url()
-            logging.debug(f"Loading {crawler.parse_url} for {keyword}")
-            crawler.load()
-            crawler.parse()
+            crawlers.append(crawler)
 
-            definitions.extend(crawler.definitions)
-            examples.extend(crawler.examples)
+    logging.debug("async loading sites")
+    asyncio.get_event_loop().run_until_complete(load_all_sites(crawlers))
 
-            if env == "dev":
-                crawler.print_data()
-    logging.info("==Crawler finished==============")
+    logging.debug("parsing definitions and examples")
+    for crawler in crawlers:
+        crawler.parse()
+        definitions.extend(crawler.definitions)
+        examples.extend(crawler.examples)
+
+        # crawler.print_data()
+
+    logging.info("==Crawlers finished==============")
 
     # Upload
 
