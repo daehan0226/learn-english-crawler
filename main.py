@@ -80,6 +80,7 @@ def run_crawler(logging, env=None, keyword=None, keyword_type=None):
         for crawler in crawlers:
             if keyword == crawler.keyword:
                 crawler.parse()
+                sites.append(crawler.site)
                 definitions.extend(crawler.definitions)
                 examples.extend(crawler.examples)
 
