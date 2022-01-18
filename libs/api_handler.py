@@ -51,20 +51,19 @@ class ApiHandler:
     @classmethod
     def upload_parsed_data(cls, env, type_, keyword, sites, definitions, examples):
         if env == "dev":
-            return True
-        try:
-            print(type_, keyword, sites, len(definitions), len(examples))
-            URL = f"{cls.api_address}/{cls.api_endpoints[type_]}/{keyword}"
-            data = {
-                "dictionaries": sites,
-                "definitions": definitions,
-                "examples": examples,
-                "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
-            }
-            token = cls.get_token()
-            if token:
-                res = requests.put(URL, data=data, headers={"Authorization": token})
-                return True
-        except Exception as e:
-            _, _, tb = sys.exc_info()
-            raise Exception(f"API get_token ERROR {tb.tb_lineno},  {e.__str__()}")
+            print(type_, keyword, sites, definitions, examples)
+        elif env == "server":
+            try:
+                URL = f"{cls._api_address}/{cls._api_endpoints[type_]}/{keyword}"
+                data = {
+                    "dictionaries": sites,
+                    "definitions": definitions,
+                    "examples": examples,
+                    "datetime": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+                }
+                token = cls.get_token()
+                if token:
+                    requests.put(URL, data=data, headers={"Authorization": token})
+            except Exception as e:
+                _, _, tb = sys.exc_info()
+                raise Exception(f"API get_token ERROR {tb.tb_lineno},  {e.__str__()}")
